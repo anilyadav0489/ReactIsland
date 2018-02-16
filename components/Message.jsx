@@ -11,7 +11,8 @@ var Message = createReactClass({
 
   render: function(){
     var that = this;
-    var gameState = this.props.gameState;
+    var {gameState, playerA, computer} = this.props.state;
+
     function displayMessage (){
       console.log(gameState);
       switch (gameState){
@@ -23,6 +24,8 @@ var Message = createReactClass({
           return <h3>Player A to select</h3>;
         case 'computerToSelect':
           return <h3>Computer is selecting...</h3>;
+        case 'GameOver':
+          return playerA > computer? <h3>Player A won</h3> : (playerA === computer? <h3> Game Drawn </h3> : <h3> Computer won </h3>);
         default:
           return <h5>Select number of Islands above to start the game...</h5>;
       }

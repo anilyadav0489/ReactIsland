@@ -40,6 +40,10 @@ var IslandPool = createReactClass({
     this.setState({islands: updatedIslandArray});
   },
 
+  addAreaInPlayersBucket(gameState, area){
+    this.props.addAreaInPlayersBucket(gameState, area);
+  },
+
   render: function(){
     var that = this;
     var numberOfIslands = this.props.numberOfIslands;
@@ -61,7 +65,9 @@ var IslandPool = createReactClass({
                     {islandArray.map(function(island, index){
                       return (<li className="island-display" key={index}>
                                 <Island key={index} id={island.id} area={island.area}
-                                  gameState={that.props.gameState} onSetIslandArea={that.handleSetIslandArea}></Island>
+                                  gameState={that.props.gameState}
+                                  addAreaInPlayersBucket={that.addAreaInPlayersBucket}
+                                  onSetIslandArea={that.handleSetIslandArea}></Island>
                               </li>);
                       })}
                 </ul>

@@ -4,7 +4,7 @@ var createReactClass = require('create-react-class');
 var IslandWallet = createReactClass({
   render: function(){
     var header = this.props.header;
-    var islandAcquired = this.props.islandAcquired;
+    var islandAcquired = header === 'Player A Bucket'? this.props.state.playerA: this.props.state.computer;
     return (
       <div>
         <h5>{header}</h5>

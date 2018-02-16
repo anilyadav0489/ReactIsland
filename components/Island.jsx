@@ -5,7 +5,9 @@ var Island = createReactClass({
   getInitialState: function(){
     return ({
       id:1,
-      area: 1
+      area: 1,
+      readOnly: false,
+      isAvailable: true
     });
   },
 
@@ -18,11 +20,36 @@ var Island = createReactClass({
 
   selectIsland: function () {
     var {gameState} = this.props;
+    var area = this.refs.islandRef.value;
     console.log('game state is: '+ gameState);
-    if(gameState === 'playerToSelect' || gameState === 'computerToSelect'){
+    if((gameState === 'playerToSelect' || gameState === 'computerToSelect' || gameState === 'GameOver')
+      && (this.state.isAvailable === true)){
       this.refs.islandRef.className = "unavailable-island island-text";
+      this.state.readOnly = true;
+      this.state.isAvailable = false;
+      this.props.addAreaInPlayersBucket(gameState, area);
+    }else if (this.state.isAvailable === true){
+      this.refs.islandRef.className = "square-island";
+    }
+  },
+
+  updateStyle: function () {
+    var {gameState} = this.props;
+    console.log('game state is: '+ gameState);
+    if(gameState === 'playerToSelect' || gameState === 'computerToSelect' || gameState === 'GameOver'){
+      this.state.readOnly = true;
     }else{
-      console.log('game state didnt match');
+      this.refs.islandRef.className = "square-island";
+    }
+  },
+
+  updateStyleToNormal: function () {
+    var {gameState} = this.props;
+    console.log('game state is: '+ gameState);
+    if(gameState === 'playerToSelect' || gameState === 'computerToSelect' || gameState === 'GameOver'){
+      this.state.readOnly = true;
+    }else{
+      this.refs.islandRef.className = "island island-text";
     }
   },
 
@@ -31,8 +58,8 @@ var Island = createReactClass({
     var area = this.props.area;
 
     return (
-        <input type="text" ref="islandRef" placeholder="0" className="island island-text"
-          onChange={this.setIslandArea} onClick={this.selectIsland}></input>
+        <input type="text" ref="islandRef" placeholder="0" className="island island-text" readOnly={this.state.readOnly}
+          onChange={this.setIslandArea} onClick={this.selectIsland} onBlur={this.updateStyleToNormal} onFocus={this.updateStyle}></input>
     );
   }
 });

@@ -8,17 +8,44 @@ var Message = require('Message');
 var Main = createReactClass({
   getInitialState: function () {
     return {
-      gameState: 'totalIslandsToBeDecided'
+      gameState: 'totalIslandsToBeDecided',
+      playerA: 0,
+      computer: 0
     }
   },
-  handleStateChange: function (gameState) {
+  handleStateChange: function (newGameState) {
     this.setState({
       ...this.state,
-      gameState: gameState
+      gameState: newGameState
     });
   },
+
+  addAreaInPlayersBucket: function(gameState, area, availableIslands) {
+    var playerA = this.state.playerA;
+    var computer = this.state.computer;
+
+    if(gameState === 'playerToSelect'){
+      playerA = +playerA + +area;
+      gameState = 'computerToSelect';
+    } else if(gameState === 'computerToSelect'){
+      computer = +computer + +area;
+      gameState = 'playerToSelect';
+    }
+
+    if(availableIslands === 0){
+      gameState = 'GameOver';
+    }
+
+    this.setState({
+      playerA,
+      computer,
+      gameState
+    });
+
+  },
+
   render: function(){
-    var {gameState} = this.state;
+
     return (
       <div>
         <div className="page-header">
@@ -30,18 +57,18 @@ var Main = createReactClass({
               <div className="top-bar-left">
                 <ul className="menu">
                   <li className="wallet-Component">
-                    <IslandWallet header="Player A Bucket" islandAcquired="0"/>
+                    <IslandWallet state={this.state} header="Player A Bucket"/>
                   </li>
                   <li>
                     <div className="store-Component">
-                      <IslandStore gameState={gameState} onStateChange={this.handleStateChange}/>
+                      <IslandStore addAreaInPlayersBucket={this.addAreaInPlayersBucket} state={this.state} onStateChange={this.handleStateChange}/>
                     </div>
                     <div className="message-Component">
-                      <Message gameState={gameState} onStateChange={this.handleStateChange}/>
+                      <Message state={this.state} onStateChange={this.handleStateChange}/>
                     </div>
                   </li>
                   <li className="wallet-Component">
-                    <IslandWallet header="Computer's Bucket" islandAcquired="0"/>
+                    <IslandWallet state={this.state} header="Computer's Bucket"/>
                   </li>
                 </ul>
               </div>

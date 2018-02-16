@@ -1,7 +1,7 @@
 .island {
   align-items: center;
   text-align: center !important;
-  background-color: $island-bg-color;
+  background-color: $island-bg-color !important;
   border: 2px solid $island-border-color;
   border-radius: 50%;
   display: flex;
@@ -12,17 +12,32 @@
   cursor: pointer;
 }
 
+.square-island {
+  align-items: center;
+  text-align: center !important;
+  background-color: $island-bg-color;
+  border: 5px solid $island-border-color;
+  border-radius: 10%;
+  display: flex;
+  height: 4rem;
+  justify-content: center;
+  margin: auto;
+  width: 4rem !important;
+  cursor: pointer;
+}
+
+
 .unavailable-island {
   align-items: center;
   text-align: center !important;
-  background-color: $unavailable-island-bg-color;
+  background-color: $unavailable-island-bg-color !important;
   border: 2px solid $unavailable-island-border-color;
   border-radius: 50%;
   display: flex;
   height: 4rem;
   justify-content: center;
   margin: auto;
-  width: 4rem !important;
+  width: 4rem !important
 }
 
 .small-island {

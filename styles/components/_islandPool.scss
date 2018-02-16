@@ -1,0 +1,20 @@
+.island-pool {
+  align-items: center;
+  background-color: $wallet-bg-color;
+  border: 2px solid $wallet-border-color;
+  height: 10.8rem;
+  justify-content: center;
+  width: $pool-width;
+  margin: 2rem -2.1rem;
+  padding: 1rem;
+}
+
+.fixed-pool {
+  align-items: center;
+  background-color: $wallet-bg-color;
+  border: 2px solid $wallet-border-color;
+  height: 8rem;
+  justify-content: center;
+  width: $pool-width;
+  margin: -2rem -2rem;
+}

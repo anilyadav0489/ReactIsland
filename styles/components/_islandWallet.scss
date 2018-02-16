@@ -1,0 +1,23 @@
+.wallet-Component {
+  align-items: center;
+  background-color: $wallet-bg-color;
+  border: 2px solid $wallet-border-color;
+  display: flex;
+  justify-content: center;
+  width: 15rem;
+  padding: 2rem 2rem;
+}
+
+.wallet-text {
+  color: $wallet-text-color;
+  font-size: 2.25rem;
+  font-weight: 300;
+}
+
+.area-aquired-text {
+  color: white;
+  font-size: 4.25rem;
+  font-weight: 300;
+  display: flex;
+  justify-content: center;
+}

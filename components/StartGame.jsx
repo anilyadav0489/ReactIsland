@@ -11,7 +11,10 @@ var StartGame = createReactClass({
     return (
       <div>
         <form onSubmit={this.startGame}>
-          <button className="button primary">Start The Game</button>
+          <div>Enter islands area for each island above by clicking on it</div>
+          <div className="center-button">
+            <button className="button primary">Start The Game</button>
+          </div>
         </form>
       </div>
     );

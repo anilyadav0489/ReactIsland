@@ -4,8 +4,7 @@ var createReactClass = require('create-react-class');
 var StartGame = createReactClass({
   startGame: function (e) {
     e.preventDefault();
-    console.log('new state changes');
-    this.props.onStateChange('playerToSelect');
+    this.props.onStateChange('playerToSelect', true);
   },
 
   render: function(){

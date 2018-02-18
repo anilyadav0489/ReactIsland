@@ -19,29 +19,20 @@ var IslandPool = createReactClass({
     };
   },
 
-  a: function (islandParam){
-      console.log(islandParam);
-  },
 
   handleSetIslandArea: function (id, area) {
-    console.log(id + 'received' + area);
     var updatedIslandArray = this.props.islandArray.map((island) => {
       if(island.id === id){
-        console.log('before area'+ island.area);
         island.area = area;
-        console.log('after area'+ island.area);
-      }else{
-        console.log('initial' + island.id + ' and ' + id);
       }
-
       return island;
     });
 
     this.setState({islands: updatedIslandArray});
   },
 
-  addAreaInPlayersBucket(gameState, area){
-    this.props.addAreaInPlayersBucket(gameState, area);
+  addAreaInPlayersBucket(gameState, area, id){
+    this.props.addAreaInPlayersBucket(gameState, area, id);
   },
 
   render: function(){
@@ -65,7 +56,7 @@ var IslandPool = createReactClass({
                     {islandArray.map(function(island, index){
                       return (<li className="island-display" key={index}>
                                 <Island key={index} id={island.id} area={island.area}
-                                  gameState={that.props.gameState}
+                                  mainState={that.props.mainState} readOnly={that.props.mainState.readOnly}
                                   addAreaInPlayersBucket={that.addAreaInPlayersBucket}
                                   onSetIslandArea={that.handleSetIslandArea}></Island>
                               </li>);

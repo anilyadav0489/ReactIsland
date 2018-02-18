@@ -29,18 +29,19 @@ var IslandStore = createReactClass({
 
     this.setState({
       totalIslands: totalIslandsCount,
-      gameState: gameState,
+      gameState,
       availableIslands: totalIslandsCount
     });
 
-    this.props.onStateChange(gameState);
+    console.log('Passing game state as: '+ gameState);
+    this.props.onStateChange(gameState, totalIslandsCount);
   },
 
-  addAreaInPlayersBucket: function(gameState, area) {
+  addAreaInPlayersBucket: function(gameState, area, id) {
     if(this.state.availableIslands != 0){
       this.state.availableIslands = +this.state.availableIslands -1;
     }
-    this.props.addAreaInPlayersBucket(gameState, area, this.state.availableIslands);
+    this.props.addAreaInPlayersBucket(gameState, area, this.state.availableIslands, id);
   },
 
   render: function(){
@@ -48,7 +49,7 @@ var IslandStore = createReactClass({
     return (
       <div>
         <IslandCountSetter gameState={this.state.gameState} onSetTotalIslands={this.handleSetTotalIslands}/>
-        <IslandPool gameState={this.props.state.gameState}
+        <IslandPool mainState={this.props.mainState}
           addAreaInPlayersBucket={this.addAreaInPlayersBucket}
           islandArray={islandArray} numberOfIslands={numberOfIslands}/>
       </div>

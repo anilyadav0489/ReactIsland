@@ -4,17 +4,15 @@ var StartGame = require('StartGame');
 
 var Message = createReactClass({
 
-  handleStateChange: function (newState) {
-    console.log('my new state'+newState);
-    this.props.onStateChange(newState);
+  handleStateChange: function (newState, readOnly) {
+    this.props.onStateChange(newState, 0, readOnly);
   },
 
   render: function(){
     var that = this;
-    var {gameState, playerA, computer} = this.props.state;
+    var {gameState, playerA, computer} = this.props.mainState;
 
     function displayMessage (){
-      console.log(gameState);
       switch (gameState){
         case 'totalIslandsToBeDecided':
           return <h5>Select number of Islands above to start the game...</h5>;

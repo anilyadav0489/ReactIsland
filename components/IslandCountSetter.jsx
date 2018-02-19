@@ -8,25 +8,25 @@ var IslandCountSetter = createReactClass({
 
   selectTotalIslandsAsTwo: function (){
     if(this.props.gameState === 'totalIslandsToBeDecided'){
-      this.props.onSetTotalIslands(2);
+      this.props.onUserSelectedTotalCount(2);
     }
   },
 
   selectTotalIslandsAsFour: function (){
     if(this.props.gameState === 'totalIslandsToBeDecided'){
-      this.props.onSetTotalIslands(4);
+      this.props.onUserSelectedTotalCount(4);
     }
   },
 
   selectTotalIslandsAsSix: function (){
     if(this.props.gameState === 'totalIslandsToBeDecided'){
-      this.props.onSetTotalIslands(6);
+      this.props.onUserSelectedTotalCount(6);
     }
   },
 
   selectTotalIslandsAsEight: function (){
     if(this.props.gameState === 'totalIslandsToBeDecided'){
-      this.props.onSetTotalIslands(8);
+      this.props.onUserSelectedTotalCount(8);
     }
   },
 

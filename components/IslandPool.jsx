@@ -11,37 +11,22 @@ var IslandPool = createReactClass({
     }
   },
 
-
-  getInitialState: function () {
-    var islandArray = this.props.islandArray;
-    return {
-      islands: []
-    };
-  },
-
-
   handleSetIslandArea: function (id, area) {
-    var updatedIslandArray = this.props.islandArray.map((island) => {
-      if(island.id === id){
-        island.area = area;
-      }
-      return island;
-    });
-
-    this.setState({islands: updatedIslandArray});
+    this.props.onSetIslandArea(id, area);
   },
 
-  addAreaInPlayersBucket(gameState, area, id){
-    this.props.addAreaInPlayersBucket(gameState, area, id);
+  handleIslandSelection(id){
+    this.props.onIslandSelection(id);
   },
+
 
   render: function(){
     var that = this;
-    var numberOfIslands = this.props.numberOfIslands;
-    var islandArray = this.props.islandArray;
+    var numberOfIslands = this.props.mainState.islands.length;
+    var islands = this.props.mainState.islands;
 
     function renderPool () {
-      if(numberOfIslands === 1){
+      if(numberOfIslands === 0){
           return (<div className="row">
                   <div className="columns small-centered small-12 medium-12 large-12">
                     <ul className="menu island-placement island-pool">
@@ -53,11 +38,12 @@ var IslandPool = createReactClass({
         return ( <div className="row">
                 <div className="columns small-centered small-12 medium-12 large-12">
                   <ul className="menu island-placement island-pool">
-                    {islandArray.map(function(island, index){
+
+                    {islands.map(function(island, index){
                       return (<li className="island-display" key={index}>
                                 <Island key={index} id={island.id} area={island.area}
                                   mainState={that.props.mainState} readOnly={that.props.mainState.readOnly}
-                                  addAreaInPlayersBucket={that.addAreaInPlayersBucket}
+                                  isPicked={island.isPicked} onIslandSelection={that.handleIslandSelection}
                                   onSetIslandArea={that.handleSetIslandArea}></Island>
                               </li>);
                       })}

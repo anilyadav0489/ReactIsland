@@ -15,43 +15,30 @@ var IslandStore = createReactClass({
     }
   },
 
-  handleSetTotalIslands: function (totalIslandsCount) {
-    var gameState = 'enterIslandsArea';
-    islandArray = [];
-
-    for(var i=1; i<=totalIslandsCount; i++) {
-       islandArray.push({
-         id: i,
-         area: 0,
-         isAvailable: true
-       });
-    }
-
-    this.setState({
-      totalIslands: totalIslandsCount,
-      gameState,
-      availableIslands: totalIslandsCount
-    });
-
-    console.log('Passing game state as: '+ gameState);
-    this.props.onStateChange(gameState, totalIslandsCount);
+  a: function(){
+    console.log('hello');
+    alert('hiiiii');
   },
 
-  addAreaInPlayersBucket: function(gameState, area, id) {
-    if(this.state.availableIslands != 0){
-      this.state.availableIslands = +this.state.availableIslands -1;
-    }
-    this.props.addAreaInPlayersBucket(gameState, area, this.state.availableIslands, id);
+  handleSetIslandArea: function(id, area){
+    this.props.onSetIslandArea(id, area);
+  },
+
+  handleUserSelectedTotalCount: function (totalIslandsCount) {
+    this.props.onUserSelectedTotalCount(totalIslandsCount);
+  },
+
+  handleIslandSelection: function(id) {
+    this.props.onIslandSelection(id);
   },
 
   render: function(){
     var numberOfIslands = this.state.totalIslands;
     return (
       <div>
-        <IslandCountSetter gameState={this.state.gameState} onSetTotalIslands={this.handleSetTotalIslands}/>
-        <IslandPool mainState={this.props.mainState}
-          addAreaInPlayersBucket={this.addAreaInPlayersBucket}
-          islandArray={islandArray} numberOfIslands={numberOfIslands}/>
+        <IslandCountSetter gameState={this.state.gameState} onUserSelectedTotalCount={this.handleUserSelectedTotalCount}/>
+        <IslandPool ref="poolComponent" mainState={this.props.mainState} onSetIslandArea={this.handleSetIslandArea}
+          onIslandSelection={this.handleIslandSelection} />
       </div>
 
     );

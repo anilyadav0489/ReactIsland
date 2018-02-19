@@ -4,7 +4,8 @@ var createReactClass = require('create-react-class');
 var Island = createReactClass({
   getDefaultProps: function(){
     return ({
-      readOnly: false
+      readOnly: false,
+      isPicked: false
     });
   },
 
@@ -13,7 +14,8 @@ var Island = createReactClass({
       id:1,
       area: 1,
       readOnly: this.props.readOnly,
-      isAvailable: true
+      isAvailable: true,
+      isPicked: this.props.isPicked
     });
   },
 
@@ -22,6 +24,16 @@ var Island = createReactClass({
     var area = this.refs.islandRef.value;
     this.props.onSetIslandArea(islandID, area);
   },
+
+  componentDidUpdate: function (prevProps, prevState){
+    debugger;
+    var id = prevProps.id;
+    var islands = prevProps.mainState.islands;
+    if(islands[id-1].isPicked === true){
+      this.refs.islandRef.className = "unavailable-island island-text";
+    }
+  },
+
 
   selectIsland: function () {
     var {gameState, leftBoundary, rightBoundary} = this.props.mainState;
@@ -32,9 +44,8 @@ var Island = createReactClass({
     if((gameState === 'playerToSelect' || gameState === 'computerToSelect' || gameState === 'GameOver')
       && (this.state.isAvailable === true) && (id === leftBoundary || id === rightBoundary)){
       this.refs.islandRef.className = "unavailable-island island-text";
-      this.state.readOnly = true;
       this.state.isAvailable = false;
-      this.props.addAreaInPlayersBucket(gameState, area, id);
+      this.props.onIslandSelection(id);
     }else if ((gameState != 'playerToSelect' && gameState != 'computerToSelect' && gameState != 'GameOver') && (this.state.isAvailable === true)){
       this.refs.islandRef.className = "square-island";
     }

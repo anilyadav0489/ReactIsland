@@ -4,6 +4,7 @@ var createReactClass = require('create-react-class');
 var IslandStore = require('IslandStore');
 var IslandWallet = require('IslandWallet');
 var Message = require('Message');
+var islandPicker = require('islandPicker');
 
 var Main = createReactClass({
   getInitialState: function () {
@@ -13,8 +14,37 @@ var Main = createReactClass({
       playerA: 0,
       computer: 0,
       leftBoundary: 0,
-      rightBoundary: 0
+      rightBoundary: 0,
+      islands: [],
+      availableIslands: []
     }
+  },
+
+  handleUserSelectedTotalCount: function(totalIslandsCount){
+    var islands = [];
+    for(var i=1; i<=totalIslandsCount; i++) {
+       islands.push({
+         id: i,
+         area: 0,
+         isAvailable: true
+       });
+    }
+
+    //update new_state for user to enter areas in circles
+    var gameState = 'enterIslandsArea';
+
+    //update initial boundary values
+    var leftBoundary = 1;
+    var rightBoundary = totalIslandsCount;
+
+    this.setState({
+      ...this.state,
+      gameState,
+      leftBoundary,
+      rightBoundary,
+      islands: islands,
+      availableIslands: islands
+    });
   },
 
   handleStateChange: function (newGameState, totalIslands, readOnly) {
@@ -38,39 +68,135 @@ var Main = createReactClass({
     console.log('setting new state to: ' + this.state.gameState);
   },
 
-
-  addAreaInPlayersBucket: function(gameState, area, availableIslands, id) {
-    var playerA = this.state.playerA;
-    var computer = this.state.computer;
-    var leftBoundary = this.state.leftBoundary;
-    var rightBoundary = this.state.rightBoundary;
-
-    if(gameState === 'playerToSelect'){
-      playerA = +playerA + +area;
-      gameState = 'computerToSelect';
-    } else if(gameState === 'computerToSelect'){
-      computer = +computer + +area;
-      gameState = 'playerToSelect';
-    }
-
-    if(id === this.state.leftBoundary){
-        leftBoundary++;
-    }else if(id === this.state.rightBoundary){
-        rightBoundary--;
-    }
-
-    if(availableIslands === 0){
-      gameState = 'GameOver';
-    }
+  //this will update islands and available_islands while user is entering area in island circles
+  handleSetIslandArea: function(id, area){
+    var islands = this.state.islands;
+    var updatedIslands = islands.map((island) => {
+      if(island.id === id){
+        island.area = area;
+      }
+      return island;
+    });
 
     this.setState({
       ...this.state,
-      playerA,
-      computer,
-      gameState,
-      leftBoundary,
-      rightBoundary
+      islands: updatedIslands,
+      availableIslands: updatedIslands
     });
+  },
+
+  componentWillUpdate(){
+    if(this.state.gameState === 'puterToSelect'){
+      //call AI to pick best in the remaining islands
+      this.pickTheBestIsland();
+    }
+    console.log("Will update"+ this.state.gameState);
+  },
+
+  componentDidUpdate(prevProps, prevState){
+    if(prevState.gameState === 'playerToSelect'){
+      //call AI to pick best in the remaining islands
+      this.pickTheBestIsland();
+    }
+    console.log("Did update" + prevState.gameState);
+  },
+
+  handleIslandSelection: function(id) {
+    var {playerA, computer, leftBoundary, rightBoundary, gameState, islands, availableIslands} = this.state;
+    var newGameState;
+
+    //mark selected island as unavailable
+    islands = islands.map(function(island){
+      if(island.id === id){
+        island.isAvailable = false;
+        island.isPicked = true;
+      }
+      return island;
+    });
+
+
+    //get selected island as object
+    var selectedIslandObjectArray = availableIslands.filter(function(island){
+      return id === island.id;
+    });
+    var selectedIsland = selectedIslandObjectArray[0];
+
+    //remove selected island from available islands
+    availableIslands = availableIslands.filter(function(island){
+      return id != island.id;
+    });
+
+    if(gameState === 'playerToSelect'){
+      //add Area in player's Bucket
+      playerA = +playerA + +selectedIsland.area;
+
+      //update boundary
+      if(id === leftBoundary){
+        leftBoundary++;
+      }else if(id === rightBoundary){
+        rightBoundary--;
+      }
+
+      //update new game state
+      newGameState = availableIslands.length > 0 ? 'computerToSelect' : 'GameOver';
+
+      //update Main component state
+
+      this.setState({
+        ...this.state,
+        playerA,
+        gameState: newGameState,
+        leftBoundary,
+        rightBoundary,
+        availableIslands
+      });
+
+    } else if(gameState === 'computerToSelect'){ //handle it carefully
+      //add Area in computer's Bucket
+      computer = +computer + +selectedIsland.area;
+
+      //update boundary
+      if(id === leftBoundary){
+        leftBoundary++;
+      }else if(id === rightBoundary){
+        rightBoundary--;
+      }
+
+      //update new game state
+      newGameState = availableIslands.length > 0 ? 'playerToSelect' : 'GameOver';
+
+      //update Main component state
+      this.setState({
+        ...this.state,
+        computer,
+        gameState: newGameState,
+        leftBoundary,
+        rightBoundary,
+        availableIslands
+      });
+    }
+  },
+
+  pickTheBestIsland: function(){
+    var that = this;
+    var {availableIslands, leftBoundary, rightBoundary} = this.state;
+
+    islandPicker.getIsland(stringify(this.state.availableIslands)).then(function(returnedIndex) {
+      var indexToConsider = returnedIndex === 0 ? leftBoundary : rightBoundary;
+      that.handleIslandSelection(indexToConsider);
+    }, function (errorMessage){
+      alert('Error occured: '+ errorMessage);
+    });
+
+    function stringify(islands){
+      var str = '';
+      islands.forEach(function(island){
+        str = str + island.area + ",";
+      });
+      str = str.substring(0, str.length-1);
+      return str;
+    }
+
   },
 
 
@@ -91,8 +217,8 @@ var Main = createReactClass({
                   </li>
                   <li>
                     <div className="store-Component">
-                      <IslandStore addAreaInPlayersBucket={this.addAreaInPlayersBucket}
-                        mainState={this.state} onStateChange={this.handleStateChange}/>
+                      <IslandStore ref="storeComponent" onIslandSelection={this.handleIslandSelection}
+                        onSetIslandArea={this.handleSetIslandArea} mainState={this.state} onUserSelectedTotalCount={this.handleUserSelectedTotalCount}/>
                     </div>
                     <div className="message-Component">
                       <Message mainState={this.state} onStateChange={this.handleStateChange}/>

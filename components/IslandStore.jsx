@@ -9,15 +9,7 @@ var IslandStore = createReactClass({
   getInitialState: function(){
     return {
       gameState: 'totalIslandsToBeDecided',
-      totalIslands: 1,
-      islandArray,
-      availableIslands: undefined
     }
-  },
-
-  a: function(){
-    console.log('hello');
-    alert('hiiiii');
   },
 
   handleSetIslandArea: function(id, area){
@@ -33,10 +25,9 @@ var IslandStore = createReactClass({
   },
 
   render: function(){
-    var numberOfIslands = this.state.totalIslands;
     return (
       <div>
-        <IslandCountSetter gameState={this.state.gameState} onUserSelectedTotalCount={this.handleUserSelectedTotalCount}/>
+        <IslandCountSetter gameState={this.props.mainState.gameState} onUserSelectedTotalCount={this.handleUserSelectedTotalCount}/>
         <IslandPool ref="poolComponent" mainState={this.props.mainState} onSetIslandArea={this.handleSetIslandArea}
           onIslandSelection={this.handleIslandSelection} />
       </div>

@@ -33,6 +33,7 @@ module.exports = {
       IslandPool: 'components/IslandPool.jsx',
       Island: 'components/Island.jsx',
       StartGame: 'components/StartGame.jsx',
+      ErrorModal: 'components/ErrorModal.jsx',
       applicationStyles: 'styles/app.scss',
       islandPicker: 'api/islandPicker.jsx'
     },

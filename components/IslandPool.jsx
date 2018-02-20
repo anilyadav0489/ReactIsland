@@ -4,13 +4,7 @@ var Island = require('Island');
 var createReactClass = require('create-react-class');
 
 var IslandPool = createReactClass({
-  getDefaultProps: function(){
-    return {
-      numberOfIslands: 1,
-      gameState: undefined
-    }
-  },
-
+  
   handleSetIslandArea: function (id, area) {
     this.props.onSetIslandArea(id, area);
   },

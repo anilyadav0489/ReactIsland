@@ -4,6 +4,7 @@ var createReactClass = require('create-react-class');
 var IslandStore = require('IslandStore');
 var IslandWallet = require('IslandWallet');
 var Message = require('Message');
+var ErrorModal = require('ErrorModal');
 var islandPicker = require('islandPicker');
 
 var Main = createReactClass({
@@ -83,14 +84,6 @@ var Main = createReactClass({
       islands: updatedIslands,
       availableIslands: updatedIslands
     });
-  },
-
-  componentWillUpdate(){
-    if(this.state.gameState === 'puterToSelect'){
-      //call AI to pick best in the remaining islands
-      this.pickTheBestIsland();
-    }
-    console.log("Will update"+ this.state.gameState);
   },
 
   componentDidUpdate(prevProps, prevState){
@@ -201,6 +194,18 @@ var Main = createReactClass({
 
 
   render: function(){
+
+    function renderError () {
+      var showError = true;
+      var errorMessage = "Welcome to the 'Pick the Best' game." +
+      "\n In this game you will play against computer " +
+      "and one who picks larger islands will win the game.";
+      if (showError === true && typeof errorMessage === 'string') {
+        return (
+          <ErrorModal message={errorMessage}/>
+        )
+      }
+    }
 
     return (
       <div>

@@ -26,7 +26,6 @@ var Island = createReactClass({
   },
 
   componentDidUpdate: function (prevProps, prevState){
-    debugger;
     var id = prevProps.id;
     var islands = prevProps.mainState.islands;
     if(islands[id-1].isPicked === true){
@@ -38,33 +37,28 @@ var Island = createReactClass({
   selectIsland: function () {
     var {gameState, leftBoundary, rightBoundary} = this.props.mainState;
     var id = this.props.id;
-
     var area = this.refs.islandRef.value;
-    console.log('Props ID: '+ id + ' :: Left '+ leftBoundary + ' :: Right '+ rightBoundary);
+
     if((gameState === 'playerToSelect' || gameState === 'computerToSelect' || gameState === 'GameOver')
       && (this.state.isAvailable === true) && (id === leftBoundary || id === rightBoundary)){
       this.refs.islandRef.className = "unavailable-island island-text";
       this.state.isAvailable = false;
       this.props.onIslandSelection(id);
-    }else if ((gameState != 'playerToSelect' && gameState != 'computerToSelect' && gameState != 'GameOver') && (this.state.isAvailable === true)){
+    }else if (gameState === 'enterIslandsArea'){
       this.refs.islandRef.className = "square-island";
     }
   },
 
   updateStyle: function () {
     var {gameState} = this.props.mainState;
-    if(gameState === 'playerToSelect' || gameState === 'computerToSelect' || gameState === 'GameOver'){
-      this.state.readOnly = true;
-    }else{
+    if(gameState === 'enterIslandsArea'){
       this.refs.islandRef.className = "square-island";
     }
   },
 
   updateStyleToNormal: function () {
     var {gameState} = this.props.mainState;
-    if(gameState === 'playerToSelect' || gameState === 'computerToSelect' || gameState === 'GameOver'){
-      this.state.readOnly = true;
-    }else{
+    if(gameState === 'enterIslandsArea'){
       this.refs.islandRef.className = "island island-text";
     }
   },
